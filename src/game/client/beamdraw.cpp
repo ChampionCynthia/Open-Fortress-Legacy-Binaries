@@ -319,7 +319,7 @@ void DrawSegs( int noise_divisions, float *prgNoise, const model_t* spritemodel,
 	Assert( fadeLength >= 0.0f );
 	float fadeFraction = fadeLength/ delta.Length();
 	
-	// BUGBUG: This code generates NANs when fadeFraction is zero! REVIST!
+	Assert( fadeFraction != 0 );
 	fadeFraction = clamp(fadeFraction,1.e-6f,1.f);
 
 	// Choose two vectors that are perpendicular to the beam

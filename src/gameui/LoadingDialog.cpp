@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -508,7 +508,7 @@ bool CLoadingDialog::SetProgressPoint( float fraction )
 			m_flProgressFraction = fraction;
 			return true;
 		}
-		return IsX360();
+		return false;
 	}
 
 	if ( !m_bShowingVACInfo && gameuifuncs->IsConnectedToVACSecureServer() )

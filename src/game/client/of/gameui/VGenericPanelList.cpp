@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -124,13 +124,6 @@ void GenericPanelList::OnKeyCodePressed( KeyCode code )
 				// if we are at the bottom of the list, navigate to the next control
 				if( m_CurrentSelectedItem == m_PanelItems[m_PanelItems.Count() - 1] )
 				{
-#ifdef _X360
-					if( GetNavDown() != 0 )
-					{
-						BaseClass::OnKeyCodePressed( code );
-					}
-					else if ( m_bWrap )
-#endif // _X360
 					{
 						SelectPanelItem( 0, GenericPanelList::SD_DOWN );
 					}
@@ -172,13 +165,6 @@ void GenericPanelList::OnKeyCodePressed( KeyCode code )
 				// if we are at the top of the list, navigate to the next control
 				if( m_CurrentSelectedItem == m_PanelItems[0] )
 				{
-#ifdef _X360
-					if( GetNavUp() != 0 )
-					{
-						BaseClass::OnKeyCodePressed( code );
-					}
-					else if ( m_bWrap )
-#endif // _X360
 					{
 						SelectPanelItem( m_PanelItems.Count() - 1, GenericPanelList::SD_UP );
 					}
@@ -469,10 +455,6 @@ void GenericPanelList::SortPanelItems( int (__cdecl *pfnCompare)( vgui::Panel* c
 	InvalidateLayout( true );
 
 	unsigned short nCurrentlySelectedIndex = 0;
-	if ( IsX360() && m_CurrentSelectedItem && GetPanelItemIndex( m_CurrentSelectedItem, nCurrentlySelectedIndex ) )
-	{
-		ScrollToPanelItem( nCurrentlySelectedIndex );
-	}
 }
 
 //=============================================================================
@@ -499,14 +481,6 @@ void GenericPanelList::PerformLayout()
 	int nextItemY = 0, visibleCount = 0;
 	int itemWide = GetWide() - ( m_PanelItemBorder * 2 );
 	
-#ifdef _X360
-	int firstVisi = GetFirstVisibleItemNumber();
-	if( firstVisi > 0 )
-	{
-		nextItemY -= firstVisi * ( m_PanelItemBorder + m_PanelItems[0]->GetTall() );
-	}
-	else 
-#endif
 	if( m_ScrVerticalScroll->IsVisible() )
 	{
 		itemWide -= m_ScrVerticalScroll->GetWide();
@@ -558,12 +532,6 @@ void GenericPanelList::PerformLayout()
 	UpdateArrows();
 	UpdatePanels();
 
-#ifdef _X360 
-	if( m_CurrentSelectedItem != NULL && ( HasFocus() || m_CurrentSelectedItem->HasFocus() ) )
-	{
-		m_CurrentSelectedItem->NavigateTo();
-	}
-#endif // _X360
 }
 
 //=============================================================================
@@ -613,8 +581,8 @@ void GenericPanelList::ApplySettings( KeyValues* inResourceData )
 
 	m_PanelItemBorder =  scheme()->GetProportionalScaledValueEx( GetScheme(), inResourceData->GetInt( "panelBorder", 4 ) );
 
-	// Never show arrows on PC.  Show arrows on 360 unless specified not to in .res file.
-	bool isArrowVisible = IsX360() ? ( inResourceData->GetInt( "arrowsVisible", 1 ) == 1 ) : false;
+	// Never show arrows on PC.
+	bool isArrowVisible = false;
 	SetScrollArrowsVisible( isArrowVisible );
 
 	m_bWrap = inResourceData->GetInt( "NoWrap", 0 ) == 0;
@@ -686,7 +654,7 @@ void GenericPanelList::UpdatePanels()
 		{
 			if( i < firstVisi || i > lastVisi )
 			{
-				panel->SetVisible( IsX360() && ( m_ItemSelectionModeMask & GenericPanelList::ISM_PERITEM ) );
+				panel->SetVisible( false );
 				if ( m_ItemSelectionModeMask & ISM_ALPHA_INVISIBLE )
 					panel->SetAlpha( 0 );
 			}

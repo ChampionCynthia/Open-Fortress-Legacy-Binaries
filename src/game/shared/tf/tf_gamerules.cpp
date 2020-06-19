@@ -6387,9 +6387,6 @@ int CTFGameRules::CalcPlayerScore( RoundStats_t *pRoundStats )
 //-----------------------------------------------------------------------------
 bool CTFGameRules::IsBirthday( void )
 {
-	if ( IsX360() )
-		return false;
-
 	if ( m_iBirthdayMode == BIRTHDAY_RECALCULATE )
 	{
 		m_iBirthdayMode = BIRTHDAY_OFF;

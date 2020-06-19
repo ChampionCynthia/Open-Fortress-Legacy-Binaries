@@ -433,15 +433,7 @@ void CHudHintKeyDisplay::OnThink()
 {
 	for (int i = 0; i < m_Labels.Count(); i++)
 	{
-		if ( IsX360() && ( i & 1 ) == 0 )
-		{
-			// Don't change the fg color for buttons (even numbered labels)
-			m_Labels[i]->SetAlpha( GetFgColor().a() );
-		}
-		else
-		{
-			m_Labels[i]->SetFgColor(GetFgColor());
-		}
+		m_Labels[i]->SetFgColor(GetFgColor());
 	}
 
 	int ox, oy;
@@ -530,74 +522,6 @@ bool CHudHintKeyDisplay::SetHintText( const char *text )
 			//!! change some key names into better names
 			char friendlyName[64];
 
-			if ( IsX360() )
-			{
-				int iNumBinds = 0;
-
-				char szBuff[ 512 ];
-				wchar_t szWideBuff[ 64 ];
-
-				for ( int iCode = 0; iCode < BUTTON_CODE_LAST; ++iCode )
-				{
-					ButtonCode_t code = static_cast<ButtonCode_t>( iCode );
-
-					bool bUseThisKey = false;
-
-					// Only check against bind name if we haven't already forced this binding to be used
-					const char *pBinding = gameuifuncs->GetBindingForButtonCode( code );
-
-					if ( !pBinding )
-						continue;
-
-					bUseThisKey = ( Q_stricmp( pBinding, binding ) == 0 );
-
-					if ( !bUseThisKey && 
-						( Q_stricmp( pBinding, "+duck" ) == 0 || Q_stricmp( pBinding, "toggle_duck" ) == 0 ) && 
-						( Q_stricmp( binding, "+duck" ) == 0 || Q_stricmp( binding, "toggle_duck" ) == 0 ) )
-					{
-						// +duck and toggle_duck are interchangable
-						bUseThisKey = true;
-					}
-
-					if ( !bUseThisKey && 
-						( Q_stricmp( pBinding, "+zoom" ) == 0 || Q_stricmp( pBinding, "toggle_zoom" ) == 0 ) && 
-						( Q_stricmp( binding, "+zoom" ) == 0 || Q_stricmp( binding, "toggle_zoom" ) == 0 ) )
-					{
-						// +zoom and toggle_zoom are interchangable
-						bUseThisKey = true;
-					}
-
-					// Don't use this bind in out list
-					if ( !bUseThisKey )
-						continue;
-
-					// Turn localized string into icon character
-					Q_snprintf( szBuff, sizeof( szBuff ), "#GameUI_Icons_%s", g_pInputSystem->ButtonCodeToString( static_cast<ButtonCode_t>( iCode ) ) );
-					g_pVGuiLocalize->ConstructString( szWideBuff, sizeof( szWideBuff ), g_pVGuiLocalize->Find( szBuff ), 0 );
-					g_pVGuiLocalize->ConvertUnicodeToANSI( szWideBuff, szBuff, sizeof( szBuff ) );
-
-					// Add this icon to our list of keys to display
-					friendlyName[ iNumBinds ] = szBuff[ 0 ];
-					++iNumBinds;
-				}
-
-				friendlyName[ iNumBinds ] = '\0';
-
-				if ( iNumBinds == 0 )
-				{
-					friendlyName[ 0 ] = '\0';
-					label->SetFont( m_hSmallFont );
-					label->SetText( "#GameUI_Icons_NONE" );
-				}
-				else
-				{
-					// 360 always uses bitmaps
-					bIsBitmap = true;
-					label->SetText( friendlyName );
-				}
-			}
-			else
-			{
 				const char *key = engine->Key_LookupBinding( *binding == '+' ? binding + 1 : binding );
 				if ( !key )
 				{
@@ -620,7 +544,6 @@ bool CHudHintKeyDisplay::SetHintText( const char *text )
 					bIsBitmap = true;
 					label->SetText( locName );
 				}
-			}
 		}
 		else
 		{

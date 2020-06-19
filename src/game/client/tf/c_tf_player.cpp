@@ -1,4 +1,4 @@
-//====== Copyright © 1996-2003, Valve Corporation, All rights reserved. =======
+//====== Copyright ï¿½ 1996-2003, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -2943,31 +2943,6 @@ void C_TFPlayer::OnDataChanged( DataUpdateType_t updateType )
 			if ( event )
 			{
 				gameeventmanager->FireEventClientSide( event );
-			}
-			if ( IsX360() )
-			{
-				const char *pTeam = NULL;
-				switch( GetTeamNumber() )
-				{
-					case TF_TEAM_RED:
-						pTeam = "red";
-						break;
-
-					case TF_TEAM_BLUE:
-						pTeam = "blue";
-						break;
-					case TF_TEAM_MERCENARY:
-						pTeam = "mercenary";
-						break;
-					case TEAM_SPECTATOR:
-						pTeam = "spectate";
-						break;
-				}
-
-				if ( pTeam )
-				{
-					engine->ChangeTeam( pTeam );
-				}
 			}
 		}
 

@@ -560,11 +560,6 @@ void CGameUI::OnGameUIHidden()
 //-----------------------------------------------------------------------------
 void CGameUI::RunFrame()
 {
-	if ( IsX360() && m_bOpenProgressOnStart )
-	{
-		m_bOpenProgressOnStart = false;
-	}
-
 	int wide, tall;
 #if defined( TOOLFRAMEWORK_VGUI_REFACTOR )
 	// resize the background panel to the screen size

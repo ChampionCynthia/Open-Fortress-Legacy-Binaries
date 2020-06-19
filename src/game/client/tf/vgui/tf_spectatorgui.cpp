@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -334,15 +334,6 @@ void CTFSpectatorGUI::UpdateKeyLabels( void )
 		char tempname[128];
 		Q_FileBase( engine->GetLevelName(), tempname, sizeof( tempname ) );
 		Q_strlower( tempname );
-
-		if ( IsX360() )
-		{
-			char *pExt = Q_stristr( tempname, ".360" );
-			if ( pExt )
-			{
-				*pExt = '\0';
-			}
-		}
 
 		Q_strncpy( szMapName, GetMapDisplayName( tempname ), sizeof( szMapName ) );
 

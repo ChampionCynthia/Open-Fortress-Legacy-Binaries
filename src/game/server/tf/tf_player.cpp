@@ -3727,13 +3727,6 @@ bool CTFPlayer::ClientCommand( const CCommand &args )
 	}
 	else if ( FStrEq( pcmd, "jointeam_nomenus" ) )
 	{
-		if ( IsX360() )
-		{
-			if ( args.ArgC() >= 2 )
-			{
-				HandleCommand_JoinTeam_NoMenus( args[1] );
-			}
-		}
 		return true;
 	}
 	else if ( FStrEq( pcmd, "closedwelcomemenu" ) )

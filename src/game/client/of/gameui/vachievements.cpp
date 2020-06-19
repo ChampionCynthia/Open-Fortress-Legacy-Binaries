@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -143,7 +143,7 @@ void AchievementListItem::SetAchievementGoal( int goal )
 }
 
 //=============================================================================
-void AchievementListItem::SetGamerScore(int score)
+/*void AchievementListItem::SetGamerScore(int score)
 {
 	m_GamerScore = score;
 
@@ -155,7 +155,7 @@ void AchievementListItem::SetGamerScore(int score)
 
 	m_LblGamerscore->SetText( buffer );
 	m_LblGamerscore->SetVisible( IsX360() && (score>0) );
-}
+}*/
 
 //=============================================================================
 int AchievementListItem::GetGoal() const
@@ -176,17 +176,16 @@ bool AchievementListItem::GetCompleted() const
 }
 
 //=============================================================================
-int AchievementListItem::GetGamerScore() const
+/*int AchievementListItem::GetGamerScore() const
 {
 	return m_GamerScore;
-}
+}*/
 
 //=============================================================================
 void AchievementListItem::ApplySchemeSettings(IScheme *pScheme)
 {
 	BaseClass::ApplySchemeSettings(pScheme);
 
-#ifndef _X360
 	if ( !m_pAchievement )
 		return;
 
@@ -279,10 +278,6 @@ void AchievementListItem::ApplySchemeSettings(IScheme *pScheme)
 		}
 	}
 	*/
-
-#else	
-	SetBgColor(pScheme->GetColor( "Button.BgColor", Color( 32, 32, 32, 255 ) ) );
-#endif
 }
 
 //=============================================================================
@@ -472,18 +467,6 @@ BaseClass(parent, panelName, false, true)
 	m_iStartingUserSlot = CBaseModPanel::GetSingleton().GetLastActiveUserId();
 
 	memset( m_wAchievementsTitle, 0, sizeof( m_wAchievementsTitle ) );
-	if ( IsX360() )
-	{
-		// Set the name of the dialog, adding the handle of the initiating user
-		const wchar_t *pwcTemplate = g_pVGuiLocalize->Find("#L4D360UI_My_Achievements_User");
-		int iActiveController = XBX_GetUserId( m_iStartingUserSlot );
-
-		const char *pszPlayerName = BaseModUI::CUIGameData::Get()->GetLocalPlayerName( iActiveController );
-
-		wchar_t wGamerTag[32];
-		g_pVGuiLocalize->ConvertANSIToUnicode( pszPlayerName, wGamerTag, sizeof( wGamerTag ) );
-		g_pVGuiLocalize->ConstructString( m_wAchievementsTitle, sizeof( m_wAchievementsTitle ), pwcTemplate, 1, wGamerTag );
-	}
 
 	SetDeleteSelfOnClose(true);
 	SetProportional( true );
@@ -494,18 +477,7 @@ BaseClass(parent, panelName, false, true)
 	m_GplAchievements->ShowScrollProgress( true );
 	m_GplAchievements->SetScrollBarVisible( IsPC() );
 	m_GplAchievements->SetBgColor( Color( 0, 0, 0, 0 ) );
-
-	if ( IsX360() )
-	{
-		m_GplAwards = new AchievementGenericPanelList( this, "GplAwards", GenericPanelList::ISM_ELEVATOR, m_iStartingUserSlot );
-		m_GplAwards->ShowScrollProgress( true );
-		m_GplAwards->SetScrollBarVisible( false );
-		m_GplAwards->SetBgColor( Color( 0, 0, 0, 0 ) );
-	}
-	else
-	{
-		m_GplAwards = NULL;
-	}
+	m_GplAwards = NULL;
 
 	m_pProgressBar = new ContinuousProgressBar( this, "ProTotalProgress" );
 	m_pProgressBar->SetImage( "progressbar", PROGRESS_TEXTURE_FG );
@@ -589,41 +561,6 @@ void Achievements::Activate()
 
 	// Populate the awards list.
 	int awardIncompleteCount= 0;
-	if ( IsX360() )
-	{
-		m_GplAwards->RemoveAllPanelItems();
-
-		for ( int i = 0; i < achievementmgr->GetAchievementCount(); i++ )
-		{
-			IAchievement* achievement = achievementmgr->GetAchievementByIndex( i, m_iStartingUserSlot );
-			if ( achievement && achievement->IsAchieved() )
-			{
-				AchievementListItem *panelItem = new AchievementListItem( achievement );
-				if ( panelItem )
-				{
-					m_GplAchievements->AddPanelItem( panelItem, true );
-				}
-
-				gamerScore += achievement->GetPointValue();
-				++m_iAwardCompleteCount;
-			}
-		}
-
-		for( int i = 0; i < achievementmgr->GetAchievementCount(); i++ )
-		{
-			IAchievement* achievement = achievementmgr->GetAchievementByIndex( i, m_iStartingUserSlot );
-			if ( achievement && !achievement->IsAchieved() )
-			{
-				AchievementListItem *panelItem = new AchievementListItem( achievement );
-				if ( panelItem )
-				{
-					m_GplAchievements->AddPanelItem( panelItem, true );
-				}
-
-				++awardIncompleteCount;
-			}
-		} 
-	}
 	if ( m_GplAwards )
 	{
 		m_GplAwards->SetVisible( false );
@@ -767,32 +704,7 @@ void Achievements::ApplySchemeSettings(vgui::IScheme *pScheme)
 	SetupAsDialogStyle();
 
 	m_pProgressBar->SetProgress( m_flTotalProgress );
-	if ( IsX360() )
-	{
-		m_pProgressBar->SetVisible( false );
-	}
 }
-
-#ifdef _X360
-void Achievements::NavigateTo()
-{
-	BaseClass::NavigateTo();
-	if ( m_bShowingAssets )
-	{
-		m_GplAwards->NavigateTo();
-	}
-	else
-	{
-		m_GplAchievements->NavigateTo();
-	}
-}
-
-void Achievements::NavigateFrom()
-{
-	BaseClass::NavigateFrom();
-
-}
-#endif // _X360
 
 //=============================================================================
 void Achievements::PaintBackground()

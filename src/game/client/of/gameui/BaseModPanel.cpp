@@ -13,10 +13,6 @@
 #include "tier2/renderutils.h"
 #include "vgui_video_player.h"
 
-#ifdef _X360
-	#include "xbox/xbox_launch.h"
-#endif
-
 // BaseModUI High-level windows
 #include "VTransitionScreen.h"
 #include "vaddonassociation.h"
@@ -147,11 +143,8 @@ void InitBackgroundSettings()
 }
 
 #ifndef _CERT
-#ifdef _X360
-ConVar ui_gameui_debug( "ui_gameui_debug", "1" );
-#else
 ConVar ui_gameui_debug( "ui_gameui_debug", "0" );
-#endif
+
 int UI_IsDebug()
 {
 	return (*(int *)(&ui_gameui_debug)) ? ui_gameui_debug.GetInt() : 0;
@@ -216,10 +209,6 @@ m_lastActiveUserId(0)
 	vgui::surface()->PrecacheFontCharacters(pScheme->GetFont("DefaultBold", true), NULL);
 	vgui::surface()->PrecacheFontCharacters(pScheme->GetFont("DefaultLarge", true), NULL);
 	vgui::surface()->PrecacheFontCharacters(pScheme->GetFont("FrameTitle", true), NULL);
-
-#ifdef _X360
-	x360_audio_english.SetValue(XboxLaunch()->GetForceEnglish());
-#endif
 
 	m_FooterPanel = new CBaseModFooterPanel(this, "FooterPanel");
 	// m_hOptionsDialog = NULL;
@@ -906,38 +895,8 @@ void CBaseModPanel::OnGameUIHidden()
 void CBaseModPanel::OpenFrontScreen()
 {
 	WINDOW_TYPE frontWindow = WT_NONE;
-#ifdef _X360
-	// make sure we are in the startup menu.
-	if ( !GameUI().IsInBackgroundLevel() )
-	{
-		engine->ClientCmd_Unrestricted( "startupmenu" );
-	}
-
-	if ( g_pMatchFramework->GetMatchSession() )
-	{
-		Warning( "CBaseModPanel::OpenFrontScreen during active game ignored!\n" );
-		return;
-	}
-
-	if( XBX_GetNumGameUsers() > 0 )
-	{
-		if ( CBaseModFrame *pAttractScreen = GetWindow( WT_ATTRACTSCREEN ) )
-		{
-			frontWindow = WT_ATTRACTSCREEN;
-		}
-		else
-		{
-			frontWindow = WT_MAINMENU;
-		}
-	}
-	else
-	{
-		frontWindow = WT_ATTRACTSCREEN;
-	}
-#else
 	frontWindow = WT_MAINMENU;
 	m_pVideo->SetVisible( true );
-#endif // _X360
 
 	if( frontWindow != WT_NONE )
 	{
@@ -1749,10 +1708,7 @@ void CBaseModPanel::OnCommand(const char *command)
 {
 	if ( !Q_stricmp( command, "QuitRestartNoConfirm" ) )
 	{
-		if ( IsX360() )
-		{
-			StartExitingProcess( false );
-		}
+		
 	}
 #if 0
 	else if ( !Q_stricmp( command, "RestartWithNewLanguage" ) )
@@ -1792,11 +1748,6 @@ void CBaseModPanel::OnCommand(const char *command)
 
 bool CBaseModPanel::IsReadyToWriteConfig( void )
 {
-	// For cert we only want to write config files is it has been at least 3 seconds
-#ifdef _X360
-	static ConVarRef r_host_write_last_time( "host_write_last_time" );
-	return ( Plat_FloatTime() > r_host_write_last_time.GetFloat() + 3.05f );
-#endif
 	return false;
 }
 

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -261,10 +261,6 @@ void MainMenu::OnCommand( const char *command )
 			NavigateFrom();
 		}
 
-		if ( IsX360() )
-		{
-			engine->ExecuteClientCmd( "demo_exit" );
-		}
 	}
 	else if (!Q_strcmp(command, "SteamworksError"))
 	{
@@ -717,24 +713,6 @@ void MainMenu::ApplySchemeSettings( IScheme *pScheme )
 	}
 
 	SetFooterState();
-
-	if ( IsX360() )
-	{		
-		GameModes *pGameModes =  dynamic_cast< GameModes* >( FindChildByName( "BtnGameModes" ) );	
-		if ( pGameModes )
-		{
-			char lastActive[MAX_PATH];
-			if ( pGameModes->GetLastActiveNameId( lastActive, sizeof( lastActive ) ) )
-			{
-				pGameModes->SetActive( lastActive, true );
-			}
-			else
-			{
-				pGameModes->SetActive( "BtnPlaySolo", true );
-			}
-			m_ActiveControl = pGameModes;
-		}
-	}
 
 	if ( IsPC() )
 	{

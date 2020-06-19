@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -370,7 +370,7 @@ void FlyoutMenu::LoadControlSettings( const char *dialogResourceName, const char
 		rDat = new KeyValues( dialogResourceName );
 
 		bool bSuccess = false;
-		if ( !IsX360() && !pathID )
+		if ( !pathID )
 		{
 			bSuccess = rDat->LoadFromFile(g_pFullFileSystem, szLoadFile, "SKIN");
 		}
@@ -380,10 +380,7 @@ void FlyoutMenu::LoadControlSettings( const char *dialogResourceName, const char
 		}
 		if ( bSuccess )
 		{
-			if ( IsX360() )
-			{
-				rDat->ProcessResolutionKeys( surface()->GetResolutionKey() );
-			}
+	
 		}
 
 

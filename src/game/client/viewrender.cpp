@@ -2120,15 +2120,7 @@ void CViewRender::RenderView( const CViewSetup &view, int nClearFlags, int whatT
 			rect.height = view.height;
 
 			pRenderContext = materials->GetRenderContext();
-			if ( IsX360() )
-			{
-				// 360 doesn't create the Fullscreen texture
-				pRenderContext->CopyRenderTargetToTextureEx( GetFullFrameFrameBufferTexture( 1 ), 0, &rect, &rect );
-			}
-			else
-			{
-				pRenderContext->CopyRenderTargetToTextureEx( GetFullscreenTexture(), 0, &rect, &rect );
-			}
+			pRenderContext->CopyRenderTargetToTextureEx( GetFullscreenTexture(), 0, &rect, &rect );
 			pRenderContext.SafeRelease();
 			m_rbTakeFreezeFrame[ view.m_eStereoEye ] = false;
 		}
@@ -2405,12 +2397,7 @@ void CViewRender::DetermineWaterRenderInfo( const VisibleFogVolumeInfo_t &fogVol
 		info.m_bOpaqueWater = false;
 		return;
 	}
-
-#ifdef _X360
-	bool bForceExpensive = false;
-#else
 	bool bForceExpensive = r_waterforceexpensive.GetBool();
-#endif
 	bool bForceReflectEntities = r_waterforcereflectentities.GetBool();
 
 #ifdef PORTAL
@@ -2468,11 +2455,7 @@ void CViewRender::DetermineWaterRenderInfo( const VisibleFogVolumeInfo_t &fogVol
 
 	// Unless expensive water is active, reflections are off.
 	bool bLocalReflection;
-#ifdef _X360
-	if( !r_WaterDrawReflection.GetBool() )
-#else
 	if( !bForceExpensive || !r_WaterDrawReflection.GetBool() )
-#endif
 	{
 		bLocalReflection = false;
 	}
@@ -2493,15 +2476,8 @@ void CViewRender::DetermineWaterRenderInfo( const VisibleFogVolumeInfo_t &fogVol
 	// Gary says: I'm reverting this change so that water LOD works on dx9 for ep2.
 
 	// Check if the water is out of the cheap water LOD range; if so, use cheap water
-#ifdef _X360
-	if ( !bForceExpensive && ( bForceCheap || ( fogVolumeInfo.m_flDistanceToWater >= m_flCheapWaterEndDistance ) ) )
-	{
-		return;
-	}
-#else
 	if ( ( (fogVolumeInfo.m_flDistanceToWater >= m_flCheapWaterEndDistance) && !bLocalReflection ) || bForceCheap )
  		return;
-#endif
 	// Get the material that is for the water surface that is visible and check to see
 	// what render targets need to be rendered, if any.
 	if ( !r_WaterDrawRefraction.GetBool() )
@@ -3169,16 +3145,6 @@ void CViewRender::DrawMonitors( const CViewSetup &cameraView )
 			continue;
 
 		++cameraNum;
-	}
-
-	if ( IsX360() && cameraNum > 0 )
-	{
-		// resolve render target to system memory texture
-		// resolving *after* all monitors drawn to ensure a single blit using fastest resolve path
-		CMatRenderContextPtr pRenderContext( materials );
-		pRenderContext->PushRenderTargetAndViewport( pCameraTarget );
-		pRenderContext->CopyRenderTargetToTextureEx( pCameraTarget, 0, NULL, NULL );
-		pRenderContext->PopRenderTargetAndViewport();
 	}
 
 #ifdef _DEBUG
@@ -4405,10 +4371,6 @@ void CRendering3dView::DrawTranslucentRenderables( bool bInSkybox, bool bShadowD
 		switch ( g_CurrentViewID )
 		{				 
 		case VIEW_MAIN:
-#ifdef _X360
-		case VIEW_INTRO_CAMERA:
-		case VIEW_INTRO_PLAYER:
-#endif
 			UpdateFullScreenDepthTexture();
 			break;
 
@@ -4992,11 +4954,6 @@ void CShadowDepthView::Draw()
 	{
 		render->Push3DView( (*this), VIEW_CLEAR_DEPTH, m_pRenderTarget, GetFrustum(), m_pDepthTexture );
 	}
-	else if( IsX360() )
-	{
-		//for the 360, the dummy render target has a separate depth buffer which we Resolve() from afterward
-		render->Push3DView( (*this), VIEW_CLEAR_DEPTH, m_pRenderTarget, GetFrustum() );
-	}
 
 	SetupCurrentView( origin, angles, VIEW_SHADOW_DEPTH_TEXTURE );
 
@@ -5036,12 +4993,6 @@ void CShadowDepthView::Draw()
 
 	pRenderContext.GetFrom( materials );
 
-	if( IsX360() )
-	{
-		//Resolve() the depth texture here. Before the pop so the copy will recognize that the resolutions are the same
-		pRenderContext->CopyRenderTargetToTextureEx( m_pDepthTexture, -1, NULL, NULL );
-	}
-
 	render->PopView( GetFrustum() );
 
 #if defined( _X360 )
@@ -5058,7 +5009,7 @@ void CFreezeFrameView::Setup( const CViewSetup &shadowViewIn )
 	BaseClass::Setup( shadowViewIn );
 
 	KeyValues *pVMTKeyValues = new KeyValues( "UnlitGeneric" );
-	pVMTKeyValues->SetString( "$basetexture", IsX360() ? "_rt_FullFrameFB1" : "_rt_FullScreen" );
+	pVMTKeyValues->SetString( "$basetexture", "_rt_FullScreen" );
 	pVMTKeyValues->SetInt( "$nocull", 1 );
 	pVMTKeyValues->SetInt( "$nofog", 1 );
 	pVMTKeyValues->SetInt( "$ignorez", 1 );
@@ -5262,19 +5213,6 @@ void CBaseWorldView::PopView()
 	pRenderContext->SetHeightClipMode( MATERIAL_HEIGHTCLIPMODE_DISABLE );
 	if( m_DrawFlags & (DF_RENDER_REFRACTION | DF_RENDER_REFLECTION) )
 	{
-		if ( IsX360() )
-		{
-			// these renders paths used their surfaces, so blit their results
-			if ( m_DrawFlags & DF_RENDER_REFRACTION )
-			{
-				pRenderContext->CopyRenderTargetToTextureEx( GetWaterRefractionTexture(), NULL, NULL );
-			}
-			if ( m_DrawFlags & DF_RENDER_REFLECTION )
-			{
-				pRenderContext->CopyRenderTargetToTextureEx( GetWaterReflectionTexture(), NULL, NULL );
-			}
-		}
-
 		render->PopView( GetFrustum() );
 		if (SavedLinearLightMapScale.x>=0)
 		{
@@ -5479,18 +5417,9 @@ void CBaseWorldView::SSAO_DepthPass()
 
 	pRenderContext->ClearColor4ub( 255, 255, 255, 255 );
 
-#if defined( _X360 )
-	Assert(0); // rebalance this if we ever use this on 360
-	pRenderContext->PushVertexShaderGPRAllocation( 112 ); //almost all work is done in vertex shaders for depth rendering, max out their threads
-#endif
-
 	pRenderContext.SafeRelease();
 
 	if( IsPC() )
-	{
-		render->Push3DView( (*this), VIEW_CLEAR_DEPTH | VIEW_CLEAR_COLOR, pSSAO, GetFrustum() );
-	}
-	else if( IsX360() )
 	{
 		render->Push3DView( (*this), VIEW_CLEAR_DEPTH | VIEW_CLEAR_COLOR, pSSAO, GetFrustum() );
 	}
@@ -5528,12 +5457,6 @@ void CBaseWorldView::SSAO_DepthPass()
 	m_DrawFlags &= ~DF_SSAO_DEPTH_PASS;
 
 	pRenderContext.GetFrom( materials );
-
-	if( IsX360() )
-	{
-		//Resolve() the depth texture here. Before the pop so the copy will recognize that the resolutions are the same
-		pRenderContext->CopyRenderTargetToTextureEx( NULL, -1, NULL, NULL );
-	}
 
 	render->PopView( GetFrustum() );
 

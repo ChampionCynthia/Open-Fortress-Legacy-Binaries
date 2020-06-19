@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -82,9 +82,6 @@ CBaseModFrame::CBaseModFrame( vgui::Panel *parent, const char *panelName, bool o
 
 	Q_snprintf(m_ResourceName, sizeof( m_ResourceName ), "Resource/UI/BaseModUI/%s.res", panelName);
 
-#ifdef _X360
-	m_PassUnhandledInput = false;
-#endif
 	m_NavBack = NULL;
 	m_bCanNavBack = false;
 
@@ -304,13 +301,6 @@ void CBaseModFrame::OnOpen()
 	
 	SetAlpha(255);//make sure we show up.
 	Activate();
-
-#ifdef _X360
-	if(m_ActiveControl != 0)
-	{
-		m_ActiveControl->NavigateTo();
-	}
-#endif // _X360
 
 	// close active menu if there is one
 	/* ~FIX
@@ -622,10 +612,6 @@ void CBaseModFrame::LoadControlSettings( const char *dialogResourceName, const c
 		}
 		if ( bSuccess )
 		{
-			if ( IsX360() )
-			{
-				rDat->ProcessResolutionKeys( surface()->GetResolutionKey() );
-			}
 			if ( pConditions && pConditions->GetFirstSubKey() )
 			{
 				GetBuildGroup()->ProcessConditionalKeys( rDat, pConditions );

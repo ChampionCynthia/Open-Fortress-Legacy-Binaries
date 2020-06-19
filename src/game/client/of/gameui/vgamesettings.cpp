@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -181,18 +181,9 @@ void GameSettings::Activate()
 	bool showServerType = false; //!Q_stricmp( "LIVE", szNetwork );
 	bool showGameAccess = !Q_stricmp( "LIVE", szNetwork );
 	
-	// On X360 we cannot allow selecting server type until the
-	// session is actually created
-	if ( IsX360() && showServerType )
-		showServerType = IsEditingExistingLobby();
-
 	//bool showSearchControls = IsCustomMatchSearchCriteria();
 
-#ifdef _X360
-	bool bPlayingSplitscreen = XBX_GetNumGameUsers() > 1;
-#else
 	bool bPlayingSplitscreen = false;
-#endif
 
 	bool showSinglePlayerControls = !Q_stricmp( "offline", szNetwork ) && !bPlayingSplitscreen;
 
@@ -299,7 +290,7 @@ void GameSettings::Activate()
 
 	if ( m_drpServerType ) //&& m_drpServerType->IsVisible() )
 	{
-		char const *szDefaultServerToCreate = IsX360() ? "official" : "dedicated";
+		char const *szDefaultServerToCreate = "dedicated";
 		szDefaultServerToCreate = "listen"; // force listen servers by default since we don't have dedicated servers for now
 		char const *szServerType = m_pSettings->GetString( "options/server", szDefaultServerToCreate );
 		char chServerType[64];

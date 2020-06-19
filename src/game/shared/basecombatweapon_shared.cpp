@@ -216,10 +216,6 @@ void CBaseCombatWeapon::Spawn( void )
 	}
 
 #if !defined( CLIENT_DLL )
-	if( IsX360() )
-	{
-		AddEffects( EF_ITEM_BLINK );
-	}
 
 	FallInit();
 	SetCollisionGroup( COLLISION_GROUP_WEAPON );

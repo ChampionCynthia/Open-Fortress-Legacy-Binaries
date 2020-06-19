@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -395,10 +395,6 @@ void KeyboardMouse::OnCommand(const char *command)
 			if ( IsPC() )
 			{
 				engine->ClientCmd_Unrestricted( "exec 360controller_pc.cfg" );
-			}
-			else if ( IsX360() )
-			{
-				engine->ClientCmd_Unrestricted( "exec 360controller_xbox.cfg" );
 			}
 		}
 

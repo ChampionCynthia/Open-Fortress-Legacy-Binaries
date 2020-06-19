@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -147,11 +147,6 @@ public:
 	void Activate();
 	void OnCommand(const char *command);
 	void OnKeyCodePressed(vgui::KeyCode code);
-
-#ifdef _X360
-	virtual void NavigateTo();
-	virtual void NavigateFrom();
-#endif
 
 	void PaintBackground( void );
 

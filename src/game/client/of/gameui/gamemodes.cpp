@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -92,11 +92,6 @@ void GameModes::ApplySchemeSettings( vgui::IScheme *pScheme )
 
 void GameModes::OnKeyCodePressed( vgui::KeyCode code )
 {
-	if ( IsX360() )
-	{
-		return BaseClass::OnKeyCodeTyped( code );
-	}
-
 	bool bHandled = false;
 
 	switch( code )
@@ -256,11 +251,6 @@ void GameModes::ApplySettings( KeyValues *pInResourceData )
 		pKV->SetInt( "visible", 0 );
 		pKV->SetInt( "enabled", m_GameModeInfos[iIndex].m_bEnabled );
 		pKV->SetInt( "tabPosition", 0 );
-		if ( IsX360() )
-		{
-			pKV->SetString( "navUp", pNavUp );
-			pKV->SetString( "navDown", pNavDown );
-		}
 		pKV->SetString( "tooltiptext", m_GameModeInfos[iIndex].m_HintText );
 		pKV->SetString( "disabled_tooltiptext", m_GameModeInfos[iIndex].m_HintTextDisabled );
 		pKV->SetString( "style", "GameModeButton" );
@@ -627,54 +617,50 @@ void GameModes::PaintBackground()
 	// draw arrows
 	if ( m_nSubPics )
 	{
-		// pc always shows the arrows because mouse can move over them at any time
-		// xbox hides the arrows when the control does not have focus
-		if ( IsPC() || ( IsX360() && bHasFocus && !bIsOpen ) )
+		// xbox highlight when scroll active
+		// (set to false because no more xbox)
+		bool bLeftHighlight = false;
+		bool bRightHightlight = false;
+
+		// pc highlights when mouse over
+		if ( IsPC() && !m_startScrollTime )
 		{
-			// xbox highlight when scroll active
-			bool bLeftHighlight = IsX360() && m_startScrollTime && !m_bLeftScroll;
-			bool bRightHightlight = IsX360() && m_startScrollTime && m_bLeftScroll;
+			int iPosX;
+			int iPosY;
+			input()->GetCursorPos( iPosX, iPosY );
+			ScreenToLocal( iPosX, iPosY );
 
-			// pc highlights when mouse over
-			if ( IsPC() && !m_startScrollTime )
+			if ( ( iPosX >= m_nLeftArrowX && iPosX <= m_nLeftArrowX + m_nArrowWidth ) &&
+				( iPosY >= m_nLeftArrowY && iPosY <= m_nLeftArrowY + m_nArrowHeight ) )
 			{
-				int iPosX;
-				int iPosY;
-				input()->GetCursorPos( iPosX, iPosY );
-				ScreenToLocal( iPosX, iPosY );
-
-				if ( ( iPosX >= m_nLeftArrowX && iPosX <= m_nLeftArrowX + m_nArrowWidth ) &&
-					( iPosY >= m_nLeftArrowY && iPosY <= m_nLeftArrowY + m_nArrowHeight ) )
-				{
-					bLeftHighlight = true;
-				}
-				else if ( ( iPosX >= m_nRightArrowX && iPosX <= m_nRightArrowX + m_nArrowWidth ) &&
-					( iPosY >= m_nRightArrowY && iPosY <= m_nRightArrowY + m_nArrowHeight ) )
-				{
-					bRightHightlight = true;
-				}
+				bLeftHighlight = true;
 			}
-
-			Color leftArrowColor;
-			leftArrowColor.SetColor( 125, 125, 125, 255 );
-			if ( bLeftHighlight )
+			else if ( ( iPosX >= m_nRightArrowX && iPosX <= m_nRightArrowX + m_nArrowWidth ) &&
+				( iPosY >= m_nRightArrowY && iPosY <= m_nRightArrowY + m_nArrowHeight ) )
 			{
-				leftArrowColor.SetColor( 255, 255, 255, 255 );
+				bRightHightlight = true;
 			}
-			vgui::surface()->DrawSetColor( leftArrowColor );
-			vgui::surface()->DrawSetTexture( m_nLeftArrowId );
-			vgui::surface()->DrawTexturedRect( m_nLeftArrowX, m_nLeftArrowY, m_nLeftArrowX + m_nArrowWidth, m_nLeftArrowY + m_nArrowHeight );
-
-			Color rightArrowColor;
-			rightArrowColor.SetColor( 125, 125, 125, 255 );
-			if ( bRightHightlight )
-			{
-				rightArrowColor.SetColor( 255, 255, 255, 255 );
-			}
-			vgui::surface()->DrawSetColor( rightArrowColor );
-			vgui::surface()->DrawSetTexture( m_nRightArrowId );
-			vgui::surface()->DrawTexturedRect( m_nRightArrowX, m_nRightArrowY, m_nRightArrowX + m_nArrowWidth, m_nRightArrowY + m_nArrowHeight );
 		}
+
+		Color leftArrowColor;
+		leftArrowColor.SetColor( 125, 125, 125, 255 );
+		if ( bLeftHighlight )
+		{
+			leftArrowColor.SetColor( 255, 255, 255, 255 );
+		}
+		vgui::surface()->DrawSetColor( leftArrowColor );
+		vgui::surface()->DrawSetTexture( m_nLeftArrowId );
+		vgui::surface()->DrawTexturedRect( m_nLeftArrowX, m_nLeftArrowY, m_nLeftArrowX + m_nArrowWidth, m_nLeftArrowY + m_nArrowHeight );
+
+		Color rightArrowColor;
+		rightArrowColor.SetColor( 125, 125, 125, 255 );
+		if ( bRightHightlight )
+		{
+			rightArrowColor.SetColor( 255, 255, 255, 255 );
+		}
+		vgui::surface()->DrawSetColor( rightArrowColor );
+		vgui::surface()->DrawSetTexture( m_nRightArrowId );
+		vgui::surface()->DrawTexturedRect( m_nRightArrowX, m_nRightArrowY, m_nRightArrowX + m_nArrowWidth, m_nRightArrowY + m_nArrowHeight );
 	}
 }
 

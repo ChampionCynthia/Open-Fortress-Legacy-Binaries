@@ -21,7 +21,7 @@
 #include "tier0/memdbgon.h"
 
 // development only, off by default for 360
-ConVar NextBotDebugHistory( "nb_debug_history", IsX360() ? "0" : "1", FCVAR_CHEAT, "If true, each bot keeps a history of debug output in memory" );
+ConVar NextBotDebugHistory( "nb_debug_history", "1", FCVAR_CHEAT, "If true, each bot keeps a history of debug output in memory" );
 
 //----------------------------------------------------------------------------------------------------------------
 INextBot::INextBot( void ) : m_debugHistory( MAX_NEXTBOT_DEBUG_HISTORY, 0 )	// CUtlVector: grow to max length, alloc 0 initially

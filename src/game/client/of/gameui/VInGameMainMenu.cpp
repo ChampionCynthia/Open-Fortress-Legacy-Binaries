@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -241,10 +241,6 @@ void InGameMainMenu::OnCommand( const char *command )
 			NavigateFrom();
 		}
 
-		if ( IsX360() )
-		{
-			engine->ExecuteClientCmd( "demo_exit" );
-		}
 	}	
 	else if ( !Q_stricmp( command, "QuitGame_NoConfirm" ) )
 	{

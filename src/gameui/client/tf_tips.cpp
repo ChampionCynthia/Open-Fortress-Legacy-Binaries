@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Rich Presence support
 //
@@ -59,28 +59,13 @@ void UTIL_ReplaceKeyBindings( const wchar_t *inbuf, int inbufsizebytes, OUT_Z_BY
 				const char *key = engine->Key_LookupBinding( *binding == '+' ? binding + 1 : binding );
 				if ( !key )
 				{
-					key = IsX360() ? "" : "< not bound >";
+					key = "< not bound >";
 				}
 
 				//!! change some key names into better names
 				char friendlyName[64];
 				bool bAddBrackets = false;
-				if ( IsX360() )
-				{
-					if ( !key || !key[0] )
-					{
-						Q_snprintf( friendlyName, sizeof(friendlyName), "#GameUI_None" );
-						bAddBrackets = true;
-					}
-					else
-					{
-						Q_snprintf( friendlyName, sizeof(friendlyName), "#GameUI_KeyNames_%s", key );
-					}
-				}
-				else
-				{
-					Q_snprintf( friendlyName, sizeof(friendlyName), "%s", key );
-				}
+				Q_snprintf( friendlyName, sizeof(friendlyName), "%s", key );
 				Q_strupr( friendlyName );
 
 				wchar_t *locName = g_pVGuiLocalize->Find( friendlyName );

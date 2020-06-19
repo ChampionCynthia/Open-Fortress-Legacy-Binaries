@@ -105,7 +105,6 @@
 #endif
 #include "vgui/ILocalize.h"
 #include "vgui/IVGui.h"
-#include "ixboxsystem.h"
 #include "ipresence.h"
 #include "engine/imatchmaking.h"
 #include "cdll_bounded_cvars.h"
@@ -222,7 +221,6 @@ IGameEventManager2 *gameeventmanager = NULL;
 ISoundEmitterSystemBase *soundemitterbase = NULL;
 IInputSystem *inputsystem = NULL;
 ISceneFileCache *scenefilecache = NULL;
-IXboxSystem *xboxsystem = NULL;	// Xbox 360 only
 IMatchmaking *matchmaking = NULL;
 IUploadGameStats *gamestatsuploader = NULL;
 IClientReplayContext *g_pClientReplayContext = NULL;
@@ -1006,10 +1004,6 @@ int CHLClient::Init(CreateInterfaceFn appSystemFactory, CreateInterfaceFn physic
 	if ((inputsystem = (IInputSystem *)appSystemFactory(INPUTSYSTEM_INTERFACE_VERSION, NULL)) == NULL)
 		return false;
 	if ((scenefilecache = (ISceneFileCache *)appSystemFactory(SCENE_FILE_CACHE_INTERFACE_VERSION, NULL)) == NULL)
-		return false;
-	if (IsX360() && (xboxsystem = (IXboxSystem *)appSystemFactory(XBOXSYSTEM_INTERFACE_VERSION, NULL)) == NULL)
-		return false;
-	if (IsX360() && (matchmaking = (IMatchmaking *)appSystemFactory(VENGINE_MATCHMAKING_VERSION, NULL)) == NULL)
 		return false;
 #ifndef _XBOX
 	if ((gamestatsuploader = (IUploadGameStats *)appSystemFactory(INTERFACEVERSION_UPLOADGAMESTATS, NULL)) == NULL)
@@ -2114,10 +2108,6 @@ void CHLClient::LevelShutdown( void )
 	g_pParticleSystemMgr->UncacheAllParticleSystems();
 #endif
 	UncacheAllMaterials();
-
-#ifdef _XBOX
-	ReleaseRenderTargets();
-#endif
 
 	// string tables are cleared on disconnect from a server, so reset our global pointers to NULL
 	ResetStringTablePointers();

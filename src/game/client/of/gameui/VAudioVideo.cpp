@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -13,10 +13,6 @@
 #include "gameui_util.h"
 #include "vgui/ISurface.h"
 #include "VGenericConfirmation.h"
-
-#ifdef _X360
-#include "xbox/xbox_launch.h"
-#endif
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -68,11 +64,6 @@ void AudioVideo::Activate()
 {
 	BaseClass::Activate();
 
-#ifdef _X360
-	CGameUIConVarRef mat_xbox_ishidef( "mat_xbox_ishidef" );
-	CGameUIConVarRef mat_xbox_iswidescreen( "mat_xbox_iswidescreen" );
-#endif
-
 	if ( m_sldBrightness )
 	{
 		m_sldBrightness->Reset();
@@ -102,21 +93,11 @@ void AudioVideo::Activate()
 	if ( m_sldFilmGrain )
 	{
 		m_sldFilmGrain->Reset();
-
-#ifdef _X360
-		if ( !mat_xbox_ishidef.GetBool() )
-		{
-			m_sldFilmGrain->SetEnabled( false );
-		}
-#endif
 	}
 
 	if ( m_drpSplitScreenDirection )
 	{
 		bool bWidescreen = false;
-#ifdef _X360
-		bWidescreen = mat_xbox_iswidescreen.GetBool();
-#endif
 
 		if ( !bWidescreen )
 		{

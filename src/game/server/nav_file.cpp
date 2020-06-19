@@ -1328,18 +1328,6 @@ const CUtlVector< Place > *CNavMesh::GetPlacesFromNavFile( bool *hasUnnamedPlace
 			}
 		}
 	}
-	
-	if ( IsX360() )
-	{
-		// 360 has compressed NAVs
-		if ( CLZMA::IsCompressed( (unsigned char *)fileBuffer.Base() ) )
-		{
-			int originalSize = CLZMA::GetActualSize( (unsigned char *)fileBuffer.Base() );
-			unsigned char *pOriginalData = new unsigned char[originalSize];
-			CLZMA::Uncompress( (unsigned char *)fileBuffer.Base(), pOriginalData );
-			fileBuffer.AssumeMemory( pOriginalData, originalSize, originalSize, CUtlBuffer::READ_ONLY );
-		}
-	}
 
 	// check magic number
 	unsigned int magic = fileBuffer.GetUnsignedInt();
@@ -1423,18 +1411,6 @@ NavErrorType CNavMesh::Load( void )
 			{
 				return NAV_CANT_ACCESS_FILE;
 			}
-		}
-	}
-
-	if ( IsX360() )
-	{
-		// 360 has compressed NAVs
-		if ( CLZMA::IsCompressed( (unsigned char *)fileBuffer.Base() ) )
-		{
-			int originalSize = CLZMA::GetActualSize( (unsigned char *)fileBuffer.Base() );
-			unsigned char *pOriginalData = new unsigned char[originalSize];
-			CLZMA::Uncompress( (unsigned char *)fileBuffer.Base(), pOriginalData );
-			fileBuffer.AssumeMemory( pOriginalData, originalSize, originalSize, CUtlBuffer::READ_ONLY );
 		}
 	}
 

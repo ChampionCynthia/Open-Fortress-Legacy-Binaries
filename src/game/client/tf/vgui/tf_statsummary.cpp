@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright ï¿½ 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -254,17 +254,7 @@ void CTFStatsSummaryPanel::ApplySchemeSettings(vgui::IScheme *pScheme)
 //-----------------------------------------------------------------------------
 void CTFStatsSummaryPanel::OnKeyCodePressed( KeyCode code )
 {
-	if ( IsX360() )
-	{
-		if ( code == KEY_XBUTTON_A )
-		{
-			OnCommand(  "nexttip" )	;
-		}
-		else if ( code == KEY_XBUTTON_B )
-		{
-			OnCommand( "vguicancel" );
-		}
-	}
+	
 }
 
 //-----------------------------------------------------------------------------

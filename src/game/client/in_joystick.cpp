@@ -639,12 +639,6 @@ float CInput::ScaleAxisValue( const float axisValue, const float axisThreshold )
 			result = ( axisValue - axisThreshold ) / ( MAX_BUTTONSAMPLE - axisThreshold );
 		}
 	}
-	else
-	{
-		// IsXbox
-		result =  axisValue * ( 1.f / MAX_BUTTONSAMPLE );
-	}
-
 	return result;
 }
 

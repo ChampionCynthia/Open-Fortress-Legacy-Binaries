@@ -2224,11 +2224,6 @@ inline void CVertexBuilder::BoneMatrix( int idx, int matrixIdx )
 	
 #ifndef NEW_SKINNING
 	unsigned char* pBoneMatrix = &m_pBoneMatrixIndex[m_nCurrentVertex * m_VertexSize_BoneMatrixIndex];
-	if ( IsX360() )
-	{
-		// store sequentially as wzyx order, gpu delivers as xyzw
-		idx = 3-idx;
-	}
 	pBoneMatrix[idx] = (unsigned char)matrixIdx;
 #else
 	float* pBoneMatrix = &m_pBoneMatrixIndex[m_nCurrentVertex * m_VertexSize_BoneMatrixIndex];
@@ -2261,8 +2256,8 @@ template <VertexCompressionType_t T> inline void CVertexBuilder::CompressedBoneW
 		// Only 1 or 2 weights (SHORT2N) supported for compressed verts so far
 		Assert( m_NumBoneWeights <= 2 );
 
-		const int WEIGHT0_SHIFT = IsX360() ? 16 : 0;
-		const int WEIGHT1_SHIFT = IsX360() ? 0 : 16;
+		const int WEIGHT0_SHIFT = 0;
+		const int WEIGHT1_SHIFT = 16;
 		unsigned int *weights = (unsigned int *)pDestWeights;
 
 		// We scale our weights so that they sum to 32768, then subtract 1 (which gets added

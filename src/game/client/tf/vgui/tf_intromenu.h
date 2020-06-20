@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2006, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -76,12 +76,8 @@ private:
 	CModelPanel		*m_pModel;
 	CExLabel		*m_pCaptionLabel;
 
-#ifdef _X360
-	CTFFooter		*m_pFooter;
-#else
 	CExButton		*m_pBack;
 	CExButton		*m_pOK;
-#endif
 
 	float			m_flActionThink;
 	int				m_iAction;

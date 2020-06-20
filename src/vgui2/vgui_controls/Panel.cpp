@@ -3161,7 +3161,7 @@ void Panel::OnKeyCodeTyped(KeyCode keycode)
 	}
 
 	// handle focus change
-	if ( IsX360() || IsConsoleStylePanel() )
+	if ( IsConsoleStylePanel() )
 	{
 		// eat these typed codes, will get handled in OnKeyCodePressed
 		switch ( code )
@@ -3560,7 +3560,7 @@ bool Panel::RequestFocusNext(VPANEL panel)
 void Panel::RequestFocus(int direction)
 {
 	// NOTE: This doesn't make any sense if we don't have keyboard input enabled
-	Assert( ( IsX360() || IsConsoleStylePanel() ) || IsKeyBoardInputEnabled() );
+	Assert( ( IsConsoleStylePanel() ) || IsKeyBoardInputEnabled() );
 	//	ivgui()->DPrintf2("RequestFocus(%s, %s)\n", GetName(), GetClassName());
 	OnRequestFocus(GetVPanel(), NULL);
 }
@@ -4616,7 +4616,7 @@ void Panel::ApplySettings(KeyValues *inResourceData)
 	excludeEdgeFromTitleSafe.width = 0;
 	excludeEdgeFromTitleSafe.height = 0;
 
-	if ( IsX360() || panel_test_title_safe.GetBool() )
+	if ( panel_test_title_safe.GetBool() )
 	{
 		// "usetitlesafe" "1" - required inner 90%
 		// "usetitlesafe" "2" - suggested inner 85%
@@ -7978,11 +7978,6 @@ Panel* Panel::NavigateBack()
 //-----------------------------------------------------------------------------
 void Panel::NavigateTo()
 {
-	if ( IsX360() )
-	{
-		RequestFocus( 0 );
-	}
-
 	CallParentFunction( new KeyValues( "OnNavigateTo", "panelName", GetName() ) );
 
 	Panel *target = GetNavToRelay();

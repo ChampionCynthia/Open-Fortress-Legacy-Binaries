@@ -69,11 +69,7 @@ typedef __m128 u32x4;
 // The compiler will sometimes, but not always, replace a pass-by-const-ref
 // with a pass-in-reg on the 360; to avoid this confusion, you can
 // explicitly use a FLTX4 as the parameter type.
-#ifdef _X360
-typedef __vector4 FLTX4;
-#else
 typedef const fltx4 & FLTX4;
-#endif
 
 // A 16-byte aligned int32 datastructure
 // (for use when writing out fltx4's as SIGNED
@@ -202,11 +198,7 @@ extern const coolint32 ALIGN16 g_SIMD_SkipTailMask[4][4] ALIGN16_POST;
 // a higher level code change. 
 // On the other hand, I'm tired of typing #ifdef _X360
 // all over the place, so this is just a nop on Intel, PS3.
-#ifdef _X360
-#define PREFETCH360(address, offset) __dcbt(offset,address)
-#else
 #define PREFETCH360(x,y) // nothing
-#endif
 
 #if USE_STDC_FOR_SIMD
 

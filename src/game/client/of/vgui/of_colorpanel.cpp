@@ -811,12 +811,6 @@ void CTFColorSlider::DrawNob()
 	int wide,tall;
 	GetTrackRect( x, y, wide, tall );
 	Color col = GetFgColor();
-#ifdef _X360
-	if(HasFocus())
-	{
-		col = m_DepressedBgColor;
-	}
-#endif
 	surface()->DrawSetColor(Color( 255, 255, 255, 255 ));
 
 	int iPanelWide, iPanelTall;

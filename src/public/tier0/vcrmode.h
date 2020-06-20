@@ -29,10 +29,6 @@ DBG_INTERFACE const char *BuildCmdLine( int argc, char **argv, bool fAddSteam = 
 tchar *GetCommandLine();
 #endif
 
-#ifdef _X360
-#define NO_VCR 1
-#endif
-
 
 // Enclose lines of code in this if you don't want anything in them written to or read from the VCR file.
 #ifndef NO_VCR

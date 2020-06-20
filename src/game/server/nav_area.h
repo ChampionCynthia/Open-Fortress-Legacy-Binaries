@@ -49,11 +49,7 @@ private:
 	static int m_nBytesCurrent;
 };
 
-#if !defined(_X360)
 typedef CUtlVectorUltraConservativeAllocator CNavVectorAllocator;
-#else
-typedef CNavVectorNoEditAllocator CNavVectorAllocator;
-#endif
 
 
 //-------------------------------------------------------------------------------------------------------------------

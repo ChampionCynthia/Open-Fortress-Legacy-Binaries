@@ -194,12 +194,7 @@ public:
 #endif
 
 #ifdef USE_NATIVE_SLIST
-#ifdef _X360
-		// integrated write-release barrier
-		return (TSLNodeBase_t *)InterlockedPushEntrySListRelease( &m_Head, pNode );
-#else
 		return (TSLNodeBase_t *)InterlockedPushEntrySList( &m_Head, pNode );
-#endif
 #else
 		TSLHead_t oldHead;
 		TSLHead_t newHead;
@@ -234,12 +229,6 @@ public:
 	TSLNodeBase_t *Pop()
 	{
 #ifdef USE_NATIVE_SLIST
-#ifdef _X360
-		// integrated read-acquire barrier
-		TSLNodeBase_t *pNode = (TSLNodeBase_t *)InterlockedPopEntrySListAcquire( &m_Head );
-#else
-		TSLNodeBase_t *pNode = (TSLNodeBase_t *)InterlockedPopEntrySList( &m_Head );
-#endif
 		return pNode;
 #else
 		TSLHead_t oldHead;

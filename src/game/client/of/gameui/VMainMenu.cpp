@@ -322,16 +322,8 @@ void MainMenu::OnCommand( const char *command )
 	else 
 	{
 		const char *pchCommand = command;
-		if ( !Q_strcmp(command, "FlmOptionsFlyout") )
-		{
-#ifdef _X360
-			if ( XBX_GetPrimaryUserIsGuest() )
-			{
-				pchCommand = "FlmOptionsGuestFlyout";
-			}
-#endif
-		}
-		else if ( StringHasPrefix( command, "FlmExtrasFlyout_" ) )
+
+		if ( StringHasPrefix( command, "FlmExtrasFlyout_" ) )
 		{
 			command = "FlmExtrasFlyoutCheck";
 		}
@@ -424,12 +416,6 @@ void MainMenu::OnKeyCodePressed( KeyCode code )
 		break;
 
 	case KEY_XBUTTON_BACK:
-#ifdef _X360
-		if ( XBX_GetNumGameUsers() > 1 )
-		{
-			OnCommand( "DisableSplitscreen" );
-		}
-#endif
 		break;
 	/*
 	case KEY_XBUTTON_INACTIVE_START:
@@ -552,15 +538,6 @@ void MainMenu::RunFrame()
 }
 
 //=============================================================================
-#ifdef _X360
-void MainMenu::Activate()
-{
-	BaseClass::Activate();
-	OnFlyoutMenuClose( NULL );
-}
-#endif
-
-//=============================================================================
 void MainMenu::PaintBackground() 
 {
 	vgui::Panel *pPanel = FindChildByName( "PnlBackground" );
@@ -616,73 +593,6 @@ void MainMenu::ApplySchemeSettings( IScheme *pScheme )
 	LoadControlSettings( pSettings );
 
 	BaseModHybridButton *button = dynamic_cast< BaseModHybridButton* >( FindChildByName( "BtnPlaySolo" ) );
-	if ( button )
-	{
-#ifdef _X360
-		button->SetText( ( XBX_GetNumGameUsers() > 1 ) ? ( "#GameUI_MainMenu_PlaySplitscreen" ) : ( "#GameUI_MainMenu_PlaySolo" ) );
-		button->SetHelpText( ( XBX_GetNumGameUsers() > 1 ) ? ( "#GameUI_MainMenu_OfflineCoOp_Tip" ) : ( "#GameUI_MainMenu_PlaySolo_Tip" ) );
-#endif
-	}
-
-#ifdef _X360
-	if ( !XBX_GetPrimaryUserIsGuest() )
-	{
-		wchar_t wszListText[ 128 ];
-		wchar_t wszPlayerName[ 128 ];
-
-		IPlayer *player1 = NULL;
-		if ( XBX_GetNumGameUsers() > 0 )
-		{
-			player1 = g_pMatchFramework->GetMatchSystem()->GetPlayerManager()->GetLocalPlayer( XBX_GetUserId( 0 ) );
-		}
-
-		IPlayer *player2 = NULL;
-		if ( XBX_GetNumGameUsers() > 1 )
-		{
-			player2 = g_pMatchFramework->GetMatchSystem()->GetPlayerManager()->GetLocalPlayer( XBX_GetUserId( 1 ) );
-		}
-
-		if ( player1 )
-		{
-			Label *pLblPlayer1GamerTag = dynamic_cast< Label* >( FindChildByName( "LblPlayer1GamerTag" ) );
-			if ( pLblPlayer1GamerTag )
-			{
-				g_pVGuiLocalize->ConvertANSIToUnicode( player1->GetName(), wszPlayerName, sizeof( wszPlayerName ) );
-				g_pVGuiLocalize->ConstructString( wszListText, sizeof( wszListText ), g_pVGuiLocalize->Find( "#GameUI_MainMenu_LocalProfilePlayer1" ), 1, wszPlayerName );
-
-				pLblPlayer1GamerTag->SetVisible( true );
-				pLblPlayer1GamerTag->SetText( wszListText );
-			}
-		}
-
-		if ( player2 )
-		{
-			Label *pLblPlayer2GamerTag = dynamic_cast< Label* >( FindChildByName( "LblPlayer2GamerTag" ) );
-			if ( pLblPlayer2GamerTag )
-			{
-				g_pVGuiLocalize->ConvertANSIToUnicode( player2->GetName(), wszPlayerName, sizeof( wszPlayerName ) );
-				g_pVGuiLocalize->ConstructString( wszListText, sizeof( wszListText ), g_pVGuiLocalize->Find( "#GameUI_MainMenu_LocalProfilePlayer2" ), 1, wszPlayerName );
-
-				pLblPlayer2GamerTag->SetVisible( true );
-				pLblPlayer2GamerTag->SetText( wszListText );
-
-				// in split screen, have player2 gamer tag instead of enable, and disable
-				SetControlVisible( "LblPlayer2DisableIcon", true );
-				SetControlVisible( "LblPlayer2Disable", true );
-				SetControlVisible( "LblPlayer2Enable", false );
-			}
-		}
-		else
-		{
-			SetControlVisible( "LblPlayer2DisableIcon", false );
-			SetControlVisible( "LblPlayer2Disable", false );
-
-			// not in split screen, no player2 gamertag, instead have enable
-			SetControlVisible( "LblPlayer2GamerTag", false );
-			SetControlVisible( "LblPlayer2Enable", true );
-		}
-	}
-#endif
 
 	if ( IsPC() )
 	{
@@ -733,23 +643,6 @@ void MainMenu::ApplySchemeSettings( IScheme *pScheme )
 #endif
 
 	// CERT CATCH ALL JUST IN CASE!
-#ifdef _X360
-	bool bAllUsersCorrectlySignedIn = ( XBX_GetNumGameUsers() > 0 );
-	for ( int k = 0; k < ( int ) XBX_GetNumGameUsers(); ++ k )
-	{
-		if ( !g_pMatchFramework->GetMatchSystem()->GetPlayerManager()->GetLocalPlayer( XBX_GetUserId( k ) ) )
-			bAllUsersCorrectlySignedIn = false;
-	}
-	if ( !bAllUsersCorrectlySignedIn )
-	{
-		Warning( "======= SIGNIN FAIL SIGNIN FAIL SIGNIN FAIL SIGNIN FAIL ==========\n" );
-		Assert( 0 );
-		CBaseModPanel::GetSingleton().CloseAllWindows( CBaseModPanel::CLOSE_POLICY_EVEN_MSGS );
-		CAttractScreen::SetAttractMode( CAttractScreen::ATTRACT_GAMESTART );
-		CBaseModPanel::GetSingleton().OpenWindow( WT_ATTRACTSCREEN, NULL, true );
-		Warning( "======= SIGNIN RESET SIGNIN RESET SIGNIN RESET SIGNIN RESET ==========\n" );
-	}
-#endif
 }
 
 const char *pDemoDisabledButtons[] = { "BtnVersus", "BtnSurvival", "BtnStatsAndAchievements", "BtnExtras" };

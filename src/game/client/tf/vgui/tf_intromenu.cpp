@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2006, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -57,12 +57,8 @@ CTFIntroMenu::CTFIntroMenu( IViewPort *pViewPort ) : CIntroMenu( pViewPort )
 	m_pModel = new CModelPanel( this, "MenuBG" );
 	m_pCaptionLabel = new CExLabel( this, "VideoCaption", "" );
 
-#ifdef _X360
-	m_pFooter = new CTFFooter( this, "Footer" );
-#else
 	m_pBack = new CExButton( this, "Back", "" );
 	m_pOK = new CExButton( this, "Skip", "" );
-#endif
 
 	m_iCurrentCaption = 0;
 	m_flVideoStartTime = 0;

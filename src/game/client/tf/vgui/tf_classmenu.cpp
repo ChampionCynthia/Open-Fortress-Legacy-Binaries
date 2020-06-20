@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2006, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -426,25 +426,11 @@ void CTFClassMenu::Update()
 	// Force them to pick a class if they haven't picked one yet.
 	if ( ( pLocalPlayer && pLocalPlayer->m_Shared.GetDesiredPlayerClassIndex() != TF_CLASS_UNDEFINED ) )
 	{
-#ifdef _X360
-		if ( m_pFooter )
-		{
-			m_pFooter->ShowButtonLabel( "cancel", true );
-		}
-#else
-		SetVisibleButton( "CancelButton", true );
-#endif
+	SetVisibleButton( "CancelButton", true );
 	}
 	else
 	{
-#ifdef _X360
-		if ( m_pFooter )
-		{
-			m_pFooter->ShowButtonLabel( "cancel", false );
-		}
-#else
 		SetVisibleButton( "CancelButton", false );
-#endif
 	}
 }
 

@@ -640,7 +640,6 @@ void CAchievementMgr::LoadGlobalState()
 
 	char	szFilename[_MAX_PATH];
 	Q_snprintf( szFilename, sizeof( szFilename ), "GameState.txt" );
-	}
 
     //=============================================================================
     // HPE_BEGIN

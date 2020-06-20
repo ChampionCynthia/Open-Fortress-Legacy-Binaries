@@ -156,17 +156,7 @@ void CheckButton::SetCheckButtonCheckable(bool state)
 //-----------------------------------------------------------------------------
 // Purpose: Gets a different foreground text color if we are selected
 //-----------------------------------------------------------------------------
-#ifdef _X360
-Color CheckButton::GetButtonFgColor()
-{
-	if (HasFocus())
-	{
-		return _selectedFgColor;
-	}
 
-	return BaseClass::GetButtonFgColor();
-}
-#else
 Color CheckButton::GetButtonFgColor()
 {
 	if ( IsArmed() )
@@ -181,7 +171,6 @@ Color CheckButton::GetButtonFgColor()
 
 	return BaseClass::GetButtonFgColor();
 }
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: 

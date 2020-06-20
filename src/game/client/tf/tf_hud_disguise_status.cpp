@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright ï¿½ 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: HUD Target ID element
 //
@@ -73,13 +73,6 @@ void CDisguiseStatus::Paint()
 
 	if ( !pPlayer )
 		return;
-
-#ifdef _X360
-	// We don't print anything on the xbox when we're fully disguised
-	if ( !pPlayer->m_Shared.InCond( TF_COND_DISGUISING ) )
-		return;
-#endif
-
 
 	int xpos = 0;
 	int ypos = 0;

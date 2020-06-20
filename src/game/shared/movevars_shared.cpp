@@ -54,17 +54,11 @@ ConVar	sv_maxspeed		( "sv_maxspeed", "320", FCVAR_NOTIFY | FCVAR_REPLICATED);
 ConVar	sv_maxspeed		( "sv_maxspeed", "320", FCVAR_NOTIFY | FCVAR_REPLICATED );
 #endif // CSTRIKE_DLL
 
-#ifdef _XBOX
-	ConVar	sv_accelerate	( "sv_accelerate", "7", FCVAR_NOTIFY | FCVAR_REPLICATED);
-#else
-
 #if defined( CSTRIKE_DLL ) || defined( HL1MP_DLL )
 	ConVar	sv_accelerate	( "sv_accelerate", "10", FCVAR_NOTIFY | FCVAR_REPLICATED);
 #else
 	ConVar	sv_accelerate	( "sv_accelerate", "10", FCVAR_NOTIFY | FCVAR_REPLICATED );
 #endif // CSTRIKE_DLL
-	
-#endif//_XBOX
 
 #if defined( OF_CLIENT_DLL ) || defined( OF_DLL )
 ConVar	of_movementmode("of_movementmode", "0", FCVAR_NOTIFY | FCVAR_REPLICATED, "Change movement mode\n0: Default OF\n1: Quake 3\n2: CPMA");

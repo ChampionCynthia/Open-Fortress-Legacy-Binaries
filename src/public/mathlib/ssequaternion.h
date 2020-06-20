@@ -37,12 +37,6 @@
 // the traditional x87 FPU operations altogether and make everything use
 // the SSE2 registers, which lessens this problem a little.
 
-// permitted only on 360, as we've done careful tuning on its Altivec math:
-#ifdef _X360
-#define ALLOW_SIMD_QUATERNION_MATH 1  // not on PC!
-#endif
-
-
 
 //---------------------------------------------------------------------
 // Load/store quaternions

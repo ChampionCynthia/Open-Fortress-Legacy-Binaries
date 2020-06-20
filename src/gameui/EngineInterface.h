@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Includes all the headers/declarations necessary to access the
 //			engine interface
@@ -30,9 +30,6 @@ extern class IEngineVGui *enginevguifuncs;
 extern class IGameUIFuncs *gameuifuncs;
 extern class IEngineSound *enginesound;
 extern class IXboxSystem  *xboxsystem;
-#ifdef _X360
-extern class IXOnline  *xonline;
-#endif
 extern class IAchievementMgr *achievementmgr; 
 #ifndef NO_STEAM
 extern class CSteamAPIContext *steamapicontext;

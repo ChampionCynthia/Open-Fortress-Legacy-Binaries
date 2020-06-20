@@ -51,14 +51,8 @@ public:
 	// and vice versa...
 	typedef S& (*FirstElementFunc_t)(CBucketHandle);
 	typedef S& (*FirstBucketFunc_t)(CElementHandle);
-
-#ifdef _X360
-	typedef uint32 CBucketHandlePram;
-	typedef uint32 CElementHandlePram;
-#else
 	typedef CBucketHandle  CBucketHandlePram;
 	typedef CElementHandle CElementHandlePram;
-#endif
 
 	// Constructor
 	CBidirectionalSet();

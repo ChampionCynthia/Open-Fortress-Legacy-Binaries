@@ -176,12 +176,6 @@ namespace SurfaceV30
 	virtual bool IsTextureIDValid(int id) = 0;
 
 	virtual int CreateNewTextureID( bool procedural = false ) = 0;
-#ifdef _XBOX
-	virtual void DestroyTextureID( int id ) = 0;
-	virtual bool IsCachedForRendering( int id, bool bSyncWait ) = 0;
-	virtual void CopyFrontBufferToBackBuffer() = 0;
-	virtual void UncacheUnusedMaterials() = 0;
-#endif
 
 	virtual void GetScreenSize(int &wide, int &tall) = 0;
 	virtual void SetAsTopMost(vgui::VPANEL panel, bool state) = 0;

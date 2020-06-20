@@ -201,13 +201,8 @@ inline int GetBitForBitnumByte( int bitNum )
 
 inline int CalcNumIntsForBits( int numBits )	{ return (numBits + (BITS_PER_INT-1)) / BITS_PER_INT; }
 
-#ifdef _X360
-#define BitVec_Bit( bitNum ) GetBitForBitnum( bitNum )
-#define BitVec_BitInByte( bitNum ) GetBitForBitnumByte( bitNum )
-#else
 #define BitVec_Bit( bitNum ) ( 1 << ( (bitNum) & (BITS_PER_INT-1) ) )
 #define BitVec_BitInByte( bitNum ) ( 1 << ( (bitNum) & 7 ) )
-#endif
 #define BitVec_Int( bitNum ) ( (bitNum) >> LOG2_BITS_PER_INT )
 
 

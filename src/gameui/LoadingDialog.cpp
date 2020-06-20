@@ -519,7 +519,7 @@ bool CLoadingDialog::SetProgressPoint( float fraction )
 	int nOldDrawnSegments = m_pProgress->GetDrawnSegmentCount();
 	m_pProgress->SetProgress( fraction );
 	int nNewDrawSegments = m_pProgress->GetDrawnSegmentCount();
-	return (nOldDrawnSegments != nNewDrawSegments) || IsX360();
+	return (nOldDrawnSegments != nNewDrawSegments);
 }
 
 //-----------------------------------------------------------------------------

@@ -265,9 +265,6 @@ void InGameMainMenu::OnCommand( const char *command )
 				BaseModHybridButton *hybrid = dynamic_cast<BaseModHybridButton *>( GetChild( iChild ) );
 				if ( hybrid && hybrid->GetCommand() && !Q_strcmp( hybrid->GetCommand()->GetString( "command"), command ) )
 				{
-#ifdef _X360
-					hybrid->NavigateFrom( );
-#endif //_X360
 					// open the menu next to the button that got clicked
 					flyout->OpenMenu( hybrid );
 					break;
@@ -440,10 +437,6 @@ void InGameMainMenu::PerformLayout( void )
 		flyout->SetListener( this );
 		
 		bool bSinglePlayer = true;
-
-#ifdef _X360
-		bSinglePlayer = ( XBX_GetNumGameUsers() == 1 );
-#endif
 
 		Button *pButton = flyout->FindChildButtonByCommand( "ReturnToLobby" );
 		if ( pButton )

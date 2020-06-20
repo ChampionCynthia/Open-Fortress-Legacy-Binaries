@@ -257,9 +257,6 @@ public:
 	virtual void	Paint( void );
 	virtual void	OnTick( void );
 	virtual void	Reset();
-#ifdef _XBOX
-	virtual bool	ShouldDraw();
-#endif
 #ifdef OF_CLIENT_DLL
 	virtual bool 	AffectedByDrawHUD( void ) { return false; }
 #endif

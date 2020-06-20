@@ -93,9 +93,6 @@ public:
 	virtual void			PreSave( CSaveRestoreData * ) override;
 	virtual void			Save( CSaveRestoreData * ) override;
 	virtual void			GetSaveComment( char *comment, int maxlength, float flMinutes, float flSeconds, bool bNoTime = false ) override;
-#ifdef _XBOX
-	virtual void			GetTitleName( const char *pMapName, char* pTitleBuff, int titleBuffSize ) override;
-#endif
 	virtual void			WriteSaveHeaders( CSaveRestoreData * ) override;
 
 	virtual void			ReadRestoreHeaders( CSaveRestoreData * ) override;

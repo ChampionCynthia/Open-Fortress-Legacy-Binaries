@@ -199,9 +199,6 @@ void GameModes::ApplySettings( KeyValues *pInResourceData )
 	m_hNameFont = pScheme->GetFont( pInResourceData->GetString( "subpicnamefont", "" ), true );
 	m_nNameFontHeight = vgui::surface()->GetFontTall( m_hNameFont );
 
-	const char *pNavUp = pInResourceData->GetString( "navUp", "" );
-	const char *pNavDown = pInResourceData->GetString( "navDown", "" );
-
 	int wideAtOpen = pInResourceData->GetInt( "wideatopen", 0 );
 
 	// need to reset due to video mode change, alt+tab, etc

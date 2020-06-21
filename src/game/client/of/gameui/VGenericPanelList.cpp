@@ -453,8 +453,6 @@ void GenericPanelList::SortPanelItems( int (__cdecl *pfnCompare)( vgui::Panel* c
 	m_PanelItems.Sort( pfnCompare );
 	RelinkNavigation();
 	InvalidateLayout( true );
-
-	unsigned short nCurrentlySelectedIndex = 0;
 }
 
 //=============================================================================

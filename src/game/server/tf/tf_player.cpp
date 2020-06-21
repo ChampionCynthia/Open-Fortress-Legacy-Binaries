@@ -1924,7 +1924,7 @@ void CTFPlayer::ManageRegularWeapons( TFPlayerClassData_t *pData )
 {
 	StripWeapons();
 	CTFWeaponBase *pWeapon = (CTFWeaponBase *)GetWeapon( 0 );
-	int pWeaponSlot[2];
+	int pWeaponSlot[2] = {0,0};
 	if ( of_startloadout.GetInt() > 0 )
 	{
 		for ( int iWeapon = 0; iWeapon < GetDesiredWeaponCount( pData ); iWeapon++ )

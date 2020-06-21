@@ -135,7 +135,7 @@ bool CTFBotSpyHide::FindHidingSpot( CTFBot *actor )
 	/* this is almost certainly some mangled inlining stuff that we've done a
 	 * relatively poor job of un-spaghettifying */
 
-	float incursion_max;
+	float incursion_max = 0.0f;
 
 	int enemy_team1 = actor->GetTeamNumber();
 	int enemy_team2 = enemy_team1;

@@ -861,13 +861,6 @@ void CGameUI::SetProgressOnStart()
 	m_bOpenProgressOnStart = true;
 }
 
-#if defined( _X360 ) && defined( _DEMO )
-void CGameUI::OnDemoTimeout()
-{
-	GetBasePanel().OnDemoTimeout();
-}
-#endif
-
 #ifndef GAMEUI_EMBEDDED
 //-----------------------------------------------------------------------------
 // Purpose: Performs a var args printf into a static return buffer
@@ -951,13 +944,21 @@ void UTIL_StringToColor32( color32 *color, const char *pString )
 }
 #endif
 
+#ifdef _DEBUG 
 #define STUB_GAMEUI_FUNC(name, ret, val, ...) \
 	ret CGameUI::name(__VA_ARGS__) \
 	{ \
 		DebuggerBreak(); \
 		return val; \
 	}
-
+#else
+//don't do debugger breakpoints on release builds
+#define STUB_GAMEUI_FUNC(name, ret, val, ...) \
+	ret CGameUI::name(__VA_ARGS__) \
+	{ \
+		return val; \
+	}
+#endif
 STUB_GAMEUI_FUNC(ShowNewGameDialog, void, , int chapter);
 STUB_GAMEUI_FUNC(SessionNotification, void, , const int notification, const int param);
 STUB_GAMEUI_FUNC(SystemNotification, void, , const int notification);
@@ -984,7 +985,7 @@ void CGameUI::SetMainMenuOverride(vgui::VPANEL panel)
 	gBasePanel = dynamic_cast<IBasePanel*>(basePanel);
 	if (!gBasePanel)
 	{
-		Assert(0);
+		Msg("There's no gBasePanel!");
 	}
 	gBasePanel->GetVguiPanel().SetParent(GetGameUIBasePanel());
 }

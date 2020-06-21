@@ -1,4 +1,4 @@
-//========= Copyright ï¿½ 1996-2006, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -181,6 +181,10 @@ protected:
 	CTFClassInfoPanel *m_pClassInfoPanel;
 
 private:
+
+#ifdef _X360
+	CTFFooter		*m_pFooter;
+#endif
 
 	ButtonCode_t	m_iClassMenuKey;
 	int				m_iCurrentClassIndex;

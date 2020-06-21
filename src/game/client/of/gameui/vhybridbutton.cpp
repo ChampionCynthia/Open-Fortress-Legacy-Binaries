@@ -677,7 +677,11 @@ void BaseModHybridButton::OnThink()
 	{
 	case EC_LIVE_REQUIRED:
 		{
+#ifdef _X360 
+			SetEnabled( CUIGameData::Get()->SignedInToLive() );
+#else
 			SetEnabled( true );
+#endif
 		}	
 		break;
 	case EC_NOTFORDEMO:

@@ -1,4 +1,4 @@
-//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -19,6 +19,10 @@
 #include "nb_header_footer.h"
 #include "materialsystem/materialsystem_config.h"
 #include "cdll_util.h"
+
+#ifdef _X360
+#include "xbox/xbox_launch.h"
+#endif
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -1387,10 +1391,14 @@ void Video::ApplyChanges()
 	m_bDirtyValues = false;
 
 	// Update the current video config file.
+#ifdef _X360
+	AssertMsg( false, "VideoCFG is not supported on 360." );
+#else
 	/*
 	int nAspectRatioMode = GetScreenAspectMode( config.m_VideoMode.m_Width, config.m_VideoMode.m_Height );
 	UpdateCurrentVideoConfig( config.m_VideoMode.m_Width, config.m_VideoMode.m_Height, nAspectRatioMode, !config.Windowed(), config.NoWindowBorder() );
 	*/
+#endif
 }
 
 void Video::OnNotifyChildFocus( vgui::Panel* child )

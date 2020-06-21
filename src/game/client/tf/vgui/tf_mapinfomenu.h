@@ -1,4 +1,4 @@
-//========= Copyright ï¿½ 1996-2006, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2006, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -61,9 +61,13 @@ protected:
 	CExLabel			*m_pTitle;
 	CExRichText			*m_pMapInfo;
 
+#ifdef _X360
+	CTFFooter			*m_pFooter;
+#else
 	CExButton			*m_pContinue;
 	CExButton			*m_pBack;
 	CExButton			*m_pIntro;
+#endif
 
 	vgui::ImagePanel	*m_pMapImage;
 

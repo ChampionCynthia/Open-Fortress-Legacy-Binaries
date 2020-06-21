@@ -1,4 +1,4 @@
-//========= Copyright ï¿½ 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -67,8 +67,13 @@ private:
 	vgui::ComboBox *m_pClassComboBox;
 	vgui::Label		*m_pTipLabel;
 	vgui::Label		*m_pTipText;
+
+#ifdef _X360
+	CTFFooter		*m_pFooter;
+#else
 	vgui::Button *m_pNextTipButton;
 	vgui::Button *m_pCloseButton;
+#endif
 
 	bool m_bInteractive;							// are we in interactive mode
 	bool m_bControlsLoaded;							// have we loaded controls yet
@@ -82,6 +87,10 @@ private:
 	int m_iTotalSpawns;								// how many spawns of all classes does this player have
 	TFStatType_t m_statBarGraph[2];					// what stat is displayed in the left hand and right hand bar graphs
 	StatDisplay_t m_displayBarGraph[2];				// the display type for the left hand and right hand bar graphs
+
+#ifdef _X360
+	bool m_bShowBackButton;
+#endif
 };
 
 

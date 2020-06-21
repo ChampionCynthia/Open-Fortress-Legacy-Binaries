@@ -52,9 +52,13 @@ CTFMapInfoMenu::CTFMapInfoMenu( IViewPort *pViewPort ) : Frame( NULL, PANEL_MAPI
 
 	m_pTitle = new CExLabel( this, "MapInfoTitle", " " );
 
+#ifdef _X360
+	m_pFooter = new CTFFooter( this, "Footer" );
+#else
 	m_pContinue = new CExButton( this, "MapInfoContinue", "#TF_Continue" );
 	m_pBack = new CExButton( this, "MapInfoBack", "#TF_Back" );
 	m_pIntro = new CExButton( this, "MapInfoWatchIntro", "#TF_WatchIntro" );
+#endif
 
 	// info window about this map
 	m_pMapInfo = new CExRichText( this, "MapInfoText" );
@@ -154,17 +158,31 @@ void CTFMapInfoMenu::CheckIntroState()
 {
 	if ( CheckForIntroMovie() && HasViewedMovieForMap() )
 	{
+#ifdef _X360
+		if ( m_pFooter )
+		{
+			m_pFooter->ShowButtonLabel( "intro", true );
+		}
+#else
 		if ( m_pIntro && !m_pIntro->IsVisible() )
 		{
 			m_pIntro->SetVisible( true );
 		}
+#endif
 	}
 	else
 	{
+#ifdef _X360
+		if ( m_pFooter )
+		{
+			m_pFooter->ShowButtonLabel( "intro", false );
+		}
+#else
 		if ( m_pIntro && m_pIntro->IsVisible() )
 		{
 			m_pIntro->SetVisible( false );
 		}
+#endif
 	}
 }
 

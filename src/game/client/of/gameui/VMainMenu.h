@@ -1,4 +1,4 @@
-//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -23,6 +23,10 @@ class MainMenu : public CBaseModFrame, public IBaseModFrameListener, public Flyo
 public:
 	MainMenu(vgui::Panel *parent, const char *panelName);
 	~MainMenu();
+
+#ifdef _X360
+	void Activate();
+#endif //_X360
 
 	void UpdateVisibility();
 

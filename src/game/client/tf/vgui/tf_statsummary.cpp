@@ -76,8 +76,13 @@ CTFStatsSummaryPanel::CTFStatsSummaryPanel() : vgui::EditablePanel( NULL, "TFSta
 	m_pTipLabel = new vgui::Label( this, "TipLabel", "" );
 	m_pTipText = new vgui::Label( this, "TipText", "" );
 
+#ifdef _X360
+	m_pFooter = new CTFFooter( this, "Footer" );
+	m_bShowBackButton = false;
+#else
 	m_pNextTipButton = new vgui::Button( this, "NextTipButton", "" );	
 	m_pCloseButton = new vgui::Button( this, "CloseButton", "" );	
+#endif
 
 	m_pBarChartComboBoxA->AddActionSignalTarget( this );
 	m_pBarChartComboBoxB->AddActionSignalTarget( this );
@@ -93,8 +98,13 @@ CTFStatsSummaryPanel::CTFStatsSummaryPanel() : vgui::EditablePanel( NULL, "TFSta
 //-----------------------------------------------------------------------------
 void CTFStatsSummaryPanel::ShowModal()
 {
+#ifdef _X360
+	m_bInteractive = false;
+	m_bShowBackButton = true;
+#else
 	// we are in interactive mode, enable controls
 	m_bInteractive = true;
+#endif
 
 	SetParent( enginevgui->GetPanel( PANEL_GAMEUIDLL ) );
 	UpdateDialog();
@@ -140,6 +150,10 @@ void CTFStatsSummaryPanel::OnCommand( const char *command )
 		SetVisible( false );
 		SetParent( (VPANEL) NULL );
 		SetDefaultSelections();
+
+#ifdef _X360
+		m_bShowBackButton = true;
+#endif
 	}
 	else if ( 0 == Q_stricmp( command, "nexttip" ) )
 	{
@@ -299,6 +313,14 @@ void CTFStatsSummaryPanel::UpdateDialog()
 	}
 
 	ClearMapLabel();
+
+#ifdef _X360
+	if ( m_pFooter )
+	{
+		m_pFooter->ShowButtonLabel( "nexttip", m_bShowBackButton );
+		m_pFooter->ShowButtonLabel( "back", m_bShowBackButton );
+	}
+#endif
 
 	// fill out bar charts
 	UpdateBarCharts();
@@ -835,6 +857,11 @@ void CTFStatsSummaryPanel::FireGameEvent( IGameEvent *event )
 void CTFStatsSummaryPanel::OnActivate()
 {
 	ClearMapLabel();
+
+#ifdef _X360
+	m_bShowBackButton = false;
+#endif
+
 	UpdateDialog();
 }
 

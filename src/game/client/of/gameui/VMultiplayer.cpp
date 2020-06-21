@@ -1,4 +1,4 @@
-//========= Copyright ï¿½ 1996-2008, Valve Corporation, All rights reserved. ============//
+//========= Copyright © 1996-2008, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: 
 //
@@ -22,6 +22,10 @@
 #include "cdll_util.h"
 #include "nb_header_footer.h"
 #include "materialsystem/materialsystem_config.h"
+
+#ifdef _X360
+#include "xbox/xbox_launch.h"
+#endif
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"

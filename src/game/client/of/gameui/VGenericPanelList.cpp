@@ -753,6 +753,146 @@ void GenericPanelList::NavigateFrom()
 }
 #endif
 
+
+#ifdef _X360
+//=============================================================================
+void GenericPanelList::NavigateTo()
+{
+	BaseClass::NavigateTo();
+
+	if ( m_CurrentSelectedItem )
+	{
+		unsigned short uIdx = 0;
+		if ( GetPanelItemIndex( m_CurrentSelectedItem, uIdx ) )
+		{
+			SelectPanelItem( uIdx );
+			m_CurrentSelectedItem->NavigateTo();
+			return;
+		}
+	}
+
+	m_CurrentSelectedItem = 0;
+
+	if( m_PanelItems.Count() > 0 )
+	{
+		// determine which item to select based on how we were navigated to
+		switch( GetLastNavDirection() )
+		{
+		case ND_UP:
+			if( !SelectPanelItem( m_PanelItems.Count() - 1, GenericPanelList::SD_UP ) )
+			{
+				// Prevent recursion
+				if( GetNavUp() != this )
+				{
+					BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_UP, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+				}
+			}
+			break;
+
+		case ND_DOWN:
+		default:
+			if( !SelectPanelItem( 0, GenericPanelList::SD_DOWN ) )
+			{
+				// Prevent recursion
+				if( GetNavDown() != this )
+				{
+					BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_DOWN, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+				}
+			}
+			break;
+		}
+	}
+	else
+	{
+		// determine which item to select based on how we were navigated to
+		switch( GetLastNavDirection() )
+		{
+		case ND_LEFT:
+			// If there is something in the direction we were going, continue on to that control
+			if( GetNavLeft() != 0 && GetNavLeft() != this )
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_LEFT, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			// Otherwise check the other direction
+			else if( GetNavRight() != 0 && GetNavRight() != this )
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_RIGHT, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			else // Otherwise just let our base class handle it
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_LEFT, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			break;
+
+		case ND_RIGHT:
+			// If there is something in the direction we were going, continue on to that control
+			if( GetNavRight() != 0 && GetNavRight() != this )
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_RIGHT, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			// Otherwise check the other direction
+			else if( GetNavLeft() != 0 && GetNavLeft() != this )
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_LEFT, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			else // Otherwise just let our base class handle it
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_RIGHT, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			break;
+
+		case ND_UP:
+			// If there is something in the direction we were going, continue on to that control
+			if( GetNavUp() != 0 && GetNavUp() != this )
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_UP, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			// Otherwise check the other direction
+			else if( GetNavDown() != 0 && GetNavDown() != this )
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_DOWN, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			else // Otherwise just let our base class handle it
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_UP, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			break;
+
+		case ND_DOWN:
+		default:
+			// If there is something in the direction we were going, continue on to that control
+			if( GetNavDown() != 0 && GetNavDown() != this )
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_DOWN, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			// Otherwise check the other direction
+			else if( GetNavUp() != 0 && GetNavUp() != this )
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_UP, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			else // Otherwise just let our base class handle it
+			{
+				BaseClass::OnKeyCodePressed( ButtonCodeToJoystickButtonCode( KEY_XSTICK1_DOWN, CBaseModPanel::GetSingleton().GetLastActiveUserId() ) );
+			}
+			break;
+		}
+	}
+}
+
+//=============================================================================
+void GenericPanelList::NavigateFrom()
+{
+	if( m_CurrentSelectedItem != 0 )
+	{
+		m_CurrentSelectedItem->NavigateFrom();
+		m_CurrentSelectedItem = 0;
+	}
+
+	BaseClass::NavigateFrom();
+}
+
+#endif // _X360
+
 //=============================================================================
 void GenericPanelList::Sort( GPL_LHS_less_RHS* sortFunction )
 {

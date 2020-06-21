@@ -69,6 +69,9 @@ protected:
 	virtual void GetSettings(KeyValues *outResourceData);
 	virtual void ApplySettings(KeyValues *inResourceData);
 	virtual const char *GetDescription();
+#ifdef _X360
+	virtual void OnKeyCodePressed(KeyCode code);
+#endif
 	virtual void OnKeyCodeTyped(KeyCode code);
 
 	virtual void DrawNob();
@@ -106,6 +109,9 @@ protected:
 	Color m_TrackColor;
 	Color m_DisabledTextColor1;
 	Color m_DisabledTextColor2;
+#ifdef _X360
+	Color m_DepressedBgColor;
+#endif
 
 	int		m_nNumTicks;
 	bool	m_bIsDragOnRepositionNob : 1;

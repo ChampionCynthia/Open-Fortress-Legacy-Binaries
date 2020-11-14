@@ -511,7 +511,7 @@ $Project "Client (Open Fortress)"
 	}
 	$Folder "Link Libraries"
 	{
-			$Lib		"$LIBPUBLIC\libdiscord-rpc" [$LINUX]
-			$ImpLib		fmod [$LINUX]
+			$Lib		"$LIBPUBLIC\libdiscord-rpc" [$LINUX||$OSXALL]
+			$ImpLib		fmod [$LINUX||$OSXALL]
 	}
 }

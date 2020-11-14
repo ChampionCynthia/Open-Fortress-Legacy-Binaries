@@ -13,7 +13,7 @@ $MacroRequired "GAMENAME"
 $Macro OUTBINNAME	"GameUI"
 $Macro OUTBINDIR	"$SRCDIR\..\game\$GAMENAME\bin"
 
-$include "$SRCDIR\vpc_scripts\source_dll_base.vpc"	[$WIN32||$LINUX]
+$include "$SRCDIR\vpc_scripts\source_dll_base.vpc"	[$WIN32||$OSXALL||$LINUX]
 
 $Configuration	"Debug"
 {
@@ -145,7 +145,7 @@ $Project "GameUI"
 		$File	"$SRCDIR\common\language.h"
 	}
 
-	$Folder	"Link Libraries" [$LINUX]
+	$Folder	"Link Libraries" [$LINUX||$OSXALL]
 	{
 		$Lib		HLLib [$ENABLE_ADDONS]
 		$Lib		bitmap

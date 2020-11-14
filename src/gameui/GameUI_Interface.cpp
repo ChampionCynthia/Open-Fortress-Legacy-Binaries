@@ -19,7 +19,12 @@
 #ifdef SendMessage
 #undef SendMessage
 #endif
-																
+
+#if defined(OSX)
+#include <mach-o/dyld_images.h>
+#include <mach-o/dyld.h>
+#endif
+
 #include "filesystem.h"
 #include "GameUI_Interface.h"
 #include "string.h"
@@ -334,7 +339,7 @@ void CGameUI::Start()
 	m_iFriendsLoadPauseFrames = 1;
 }
 
-#if defined(POSIX)
+#if defined(__linux__)
 // based off game/shared/of/util/os_utils.cpp (momentum mod)
 bool linux_platformdir_helper( char *buf, int size)
 {
@@ -365,6 +370,35 @@ bool linux_platformdir_helper( char *buf, int size)
 }
 #endif
 
+#if defined(OSX)
+// Based off os_utils.cpp and the function above.
+bool osx_platformdir_helper(char *buf, size_t length)
+{
+	task_t task;
+	task_dyld_info dlyd_info;
+	mach_msg_type_number_t count = TASK_DYLD_INFO_COUNT;
+	
+	if (task_info(mach_task_self_, TASK_DYLD_INFO, (task_info_t)&dlyd_info, &count) == KERN_SUCCESS) //request info regarding dylibs in this task (hl2_osx)
+	{
+		dyld_all_image_infos *infos = (dyld_all_image_infos*)dlyd_info.all_image_info_addr;
+		const uint32_t image_count = infos->infoArrayCount;
+		const dyld_image_info *image_array = infos->infoArray;
+		
+		for(int i = image_count-1; i >= 0; i--) //iterate through all dylibs backwards (since engine.dylib is likely to have been loaded near the end)
+		{
+			if (strstr(image_array[i].imageFilePath, "hl2_osx")) //found it!
+			{
+				memmove(buf, image_array[i].imageFilePath, strlen(image_array[i].imageFilePath) + 1);
+				return true; //success!
+			}
+		}
+		return false; //failed to find the given process
+	}
+	buf[0] = '\0';
+	return false; //failed to find task info
+}
+#endif // OSX
+
 //-----------------------------------------------------------------------------
 // Purpose: Finds which directory the platform resides in
 // Output : Returns true on success, false on failure.
@@ -382,12 +416,16 @@ bool CGameUI::FindPlatformDirectory(char *platformDir, int bufferSize)
 			if (::GetModuleFileName((HINSTANCE)GetModuleHandle(NULL), platformDir, bufferSize))
 			{
 				char *lastslash = strrchr(platformDir, '\\'); // this should be just before the filename
-#elif defined(POSIX)
+#elif defined(__linux__)
 			if ( linux_platformdir_helper(platformDir, bufferSize) )
 			{
 				char *lastslash = strrchr(platformDir, '/'); // this should be just before the filename
+#elif defined(OSX)
+			if ( osx_platformdir_helper(platformDir, bufferSize) )
+			{
+				char *lastslash = strrchr(platformDir, '/'); // this should be just before the filename
 #else
-#error "GameUI: Mac OSX Support is for people who look in os_utils.cpp for inspiration!"
+#error "GameUI: Unknown platform!"
 #endif
 				if ( lastslash )
 				{

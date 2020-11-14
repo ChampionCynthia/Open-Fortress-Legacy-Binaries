@@ -23,12 +23,16 @@ GCC_REUSE_STRINGS = YES
 // Once libcef_dll_wrapper has been built with libc++, and you rebuild protobuf
 // with libc++ (which is trivial), you can remove CPP11_NO_LIBCXX and add the
 // following line to the xcconfig:
-// CLANG_CXX_LIBRARY = libc++
-GCC_PREPROCESSOR_DEFINITIONS = _DLL_EXT=.dylib NO_MALLOC_OVERRIDE=1 VPROF_LEVEL=1 NO_HOOK_MALLOC=1 PNG_NO_PEDANTIC_WARNINGS CPP11_NO_LIBCXX
+CLANG_CXX_LIBRARY = libc++
+GCC_PREPROCESSOR_DEFINITIONS = _DLL_EXT=.dylib NO_MALLOC_OVERRIDE=1 VPROF_LEVEL=1 NO_HOOK_MALLOC=1 PNG_NO_PEDANTIC_WARNINGS
 BASE_CFLAGS= -Usprintf -Ustrncpy -UPROTECTED_THINGS_ENABLE -ftemplate-depth=512
 
 GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO
 WARNING_CFLAGS = -Wno-deprecated-writable-strings -Wno-switch-enum -Wno-switch -Wno-unused-value -Wno-parentheses -Wno-logical-op-parentheses -Wno-c++11-narrowing
+
+// OPEN FORTRESS runtime library path
+// Sets where we look for FMod and Discord DLLs
+LD_RUNPATH_SEARCH_PATHS = @loader_path/
 
 // CLANG - and use the ccache wrapper
 GCC_VERSION = com.apple.compilers.llvm.clang.1_0
@@ -42,5 +46,5 @@ CLANG_CXX_LANGUAGE_STANDARD = gnu++11
 USE_HEADERMAP = NO
 
 SDKROOT = macosx10.9
-MACOSX_DEPLOYMENT_TARGET = 10.5
+MACOSX_DEPLOYMENT_TARGET = 10.7
 GCC_FAST_MATH = YES
